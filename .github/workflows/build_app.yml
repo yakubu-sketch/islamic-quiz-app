@@ -63,12 +63,10 @@ jobs:
 
       - name: Build iOS (No Codesign for Testing)
         run: |
-          cd islamic_quiz_app
           flutter build ios --release --no-codesign
 
       - name: Compress iOS App Bundle
         run: |
-          cd islamic_quiz_app/build/ios/iphoneos
           zip -r Runner.app.zip Runner.app
 
       - name: Upload iOS App Artifact
