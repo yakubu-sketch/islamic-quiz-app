@@ -35,7 +35,6 @@ jobs:
 
       - name: Build Android Release APK
         run: |
-          cd islamic_quiz_app
           flutter build apk --release
 
       - name: Upload Android APK Artifact
