@@ -1,0 +1,80 @@
+name: Build Android APK & iOS App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java Development Kit (JDK)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: |
+          cd islamic_quiz_app
+          flutter pub get
+
+      - name: Build Android Release APK
+        run: |
+          cd islamic_quiz_app
+          flutter build apk --release
+
+      - name: Upload Android APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: islamic-quiz-android-apk
+          path: islamic_quiz_app/build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    name: Build iOS Runner Package
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: |
+          cd islamic_quiz_app
+          flutter pub get
+
+      - name: Build iOS (No Codesign for Testing)
+        run: |
+          cd islamic_quiz_app
+          flutter build ios --release --no-codesign
+
+      - name: Compress iOS App Bundle
+        run: |
+          cd islamic_quiz_app/build/ios/iphoneos
+          zip -r Runner.app.zip Runner.app
+
+      - name: Upload iOS App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: islamic-quiz-ios-app
+          path: islamic_quiz_app/build/ios/iphoneos/Runner.app.zip
