@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-android:
@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: islamic-quiz-android-apk
-          path: islamic_quiz_app/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
 
   build-ios:
     name: Build iOS Runner Package
@@ -72,4 +72,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: islamic-quiz-ios-app
-          path: islamic_quiz_app/build/ios/iphoneos/Runner.app.zip
+          path: build/ios/iphoneos/Runner.app
