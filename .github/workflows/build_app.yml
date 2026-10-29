@@ -58,7 +58,6 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd islamic_quiz_app
           flutter pub get
 
       - name: Build iOS (No Codesign for Testing)
